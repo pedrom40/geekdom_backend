@@ -9,6 +9,16 @@ const jsonParser  = bodyParser.json();
 const upsAPI      = require('shipping-ups');
 const mysql       = require('mysql');
 
+const app = express();
+
+
+// log the http layer
+app.use(morgan('common'));
+
+// CORS
+app.use(cors({ origin: '*' }));
+
+
 // setup ups
 const {UPS_USERNAME, UPS_PASSWORD, UPS_ACCESS_KEY} = require('./config');
 const ups = new upsAPI({
@@ -18,15 +28,6 @@ const ups = new upsAPI({
   access_key: UPS_ACCESS_KEY,
   imperial: true // set to false for metric
 });
-
-// mount express
-const app = express();
-
-// log the http layer
-app.use(morgan('common'));
-
-// CORS
-app.use(cors({ origin: '*' }));
 
 // validate address
 app.get('/validateAddress', (req, res) => {
@@ -93,6 +94,7 @@ app.get('/getShippingRates', (req, res) => {
   });
 
 });
+
 
 // setup server
 let server;
