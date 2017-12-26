@@ -1,4 +1,4 @@
-exports.PORT = process.env.PORT || global.PORT || 3000;
+exports.PORT = process.env.PORT || 3000;
 
 exports.MYSQL_HOST = process.env.MYSQL_HOST || 'localhost';
 exports.MYSQL_USER = process.env.MYSQL_USER || 'root';
