@@ -20,7 +20,7 @@ app.use('/products/', productsRouter);
 app.use(morgan('common'));
 
 // CORS
-app.use(cors({ origin: '*' }));
+app.use(cors());
 
 
 // setup ups
