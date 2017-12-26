@@ -40,6 +40,91 @@ router.get('/categories', (req, res) => {
 
 });
 
+// GET: category id from name in url
+router.get('/category/name/:name', (req, res) => {
+
+  // return category id from name
+  let sqlQuery = `
+    SELECT id
+    FROM product_categories
+    WHERE name = "${req.params.name}"
+      AND active = 1
+  `;
+
+  db.getData(sqlQuery, (err, results) => {
+
+    // on error
+    if (err) {
+      console.log(err);
+      res.send(500, 'Internal Server Error');
+    }
+
+    // send main product details array
+    res.json(results);
+
+  });
+
+});
+
+// GET: category name from the category id
+router.get('/category/id/:id', (req, res) => {
+
+  // return category id from name
+  let sqlQuery = `
+    SELECT name
+    FROM product_categories
+    WHERE id = "${req.params.id}"
+      AND active = 1
+  `;
+
+  db.getData(sqlQuery, (err, results) => {
+
+    // on error
+    if (err) {
+      console.log(err);
+      res.send(500, 'Internal Server Error');
+    }
+
+    // send main product details array
+    res.json(results);
+
+  });
+
+});
+
+// GET: all products in this category
+router.get('/category/:id', (req, res) => {
+
+  // return category id from name
+  let sqlQuery = `
+    SELECT 
+      	products.id,
+        products.name,
+        products.short_desc,
+        products.category_id,
+        products.image_id_list,
+        product_categories.name AS categoryName
+      FROM products, product_categories
+      WHERE products.category_id = ${req.params.id}
+      	AND product_categories.id = products.category_id
+        AND products.active = 1
+  `;
+
+  db.getData(sqlQuery, (err, results) => {
+
+    // on error
+    if (err) {
+      console.log(err);
+      res.send(500, 'Internal Server Error');
+    }
+
+    // send main product details array
+    res.json(results);
+
+  });
+
+});
+
 // GET: return all product details from id
 router.get('/details/:id', (req, res) => {
 
