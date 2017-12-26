@@ -2,20 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const jsonParser = bodyParser.json();
+const cors = require('cors');
 
 // pull in db connection
 const db = require('../database');
 
 // CORS
-router.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
-  if (req.method === 'OPTIONS') {
-    return res.send(204);
-  }
-  next();
-});
+router.use(cors());
 
 // GET: return all categories in use
 router.get('/categories', jsonParser, (req, res) => {
