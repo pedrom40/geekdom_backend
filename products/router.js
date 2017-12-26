@@ -125,6 +125,32 @@ router.get('/category/:id', (req, res) => {
 
 });
 
+// GET: main product image
+router.get('/img/:id', (req, res) => {
+
+  // return category id from name
+  let sqlQuery = `
+    SELECT img_src
+    FROM products_images
+    WHERE id = ${req.params.id}
+      AND active = 1
+  `;
+
+  db.getData(sqlQuery, (err, results) => {
+
+    // on error
+    if (err) {
+      console.log(err);
+      res.send(500, 'Internal Server Error');
+    }
+
+    // send main product details array
+    res.json(results);
+
+  });
+
+});
+
 // GET: return all product details from id
 router.get('/details/:id', (req, res) => {
 
