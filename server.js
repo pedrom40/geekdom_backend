@@ -7,9 +7,13 @@ const cors        = require('cors');
 const bodyParser  = require('body-parser');
 const jsonParser  = bodyParser.json();
 const upsAPI      = require('shipping-ups');
-const mysql       = require('mysql');
+const mysql = require('mysql');
 
 const app = express();
+
+// setup routers
+const {router: productsRouter} = require('./products/router');
+app.use('/products/', productsRouter);
 
 
 // log the http layer
@@ -95,53 +99,7 @@ app.get('/getShippingRates', (req, res) => {
 
 });
 
-
-// setup server
-let server;
-const {MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_PORT, PORT} = require('./config');
-const connection = mysql.createConnection({
-  host: MYSQL_HOST,
-  user: MYSQL_USER,
-  password: MYSQL_PASSWORD,
-  database: MYSQL_DATABASE,
-  port: MYSQL_PORT
+const {PORT} = require('./config');
+app.listen(PORT, () => {
+  console.log(`Your app is listening on port ${PORT}`);
 });
-
-function runServer() {
-  return new Promise((resolve, reject) => {
-    connection.connect(function(err){
-      if (err) {
-        return reject(err);
-      }
-      server = app
-        .listen(PORT, () => {
-          console.log(`Your app is listening on port ${PORT}`);
-          resolve();
-        });
-        connection.on('error', err => {
-          connection.end();
-          reject(err);
-        });
-    });
-  });
-}
-
-function closeServer() {
-  return connection.end().then(() => {
-    return new Promise((resolve, reject) => {
-      console.log('Closing server');
-      server.close(err => {
-        if (err) {
-          return reject(err);
-        }
-        resolve();
-      });
-    });
-  });
-}
-
-if (require.main === module) {
-  runServer().catch(err => console.error(err));
-}
-
-module.exports = {app, runServer, closeServer};
