@@ -126,7 +126,7 @@ router.get('/category/:id', (req, res) => {
 });
 
 // GET: main product image
-router.get('/img/:id', (req, res) => {
+router.get('/mainImg/:id', (req, res) => {
 
   // return category id from name
   let sqlQuery = `
